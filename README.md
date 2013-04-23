@@ -2,6 +2,8 @@
 
 A cookbook to setup a Jetty server.
 
+[![Build status](https://api.travis-ci.org/hipsnip-cookbooks/jetty.png)](https://travis-ci.org/hipsnip-cookbooks/jetty)
+
 ## Requirements
 
 Built to run on Linux distribution. Tested on Ubuntu 12.04.
