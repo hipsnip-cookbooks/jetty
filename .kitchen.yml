@@ -1,0 +1,30 @@
+---
+driver_plugin: vagrant
+platforms:
+- name: ubuntu-12.04
+  driver_config:
+    box: opscode-ubuntu-12.04
+    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_chef-11.2.0.box
+    require_chef_omnibus: 11.4.0
+    customize:
+      cpus: 2
+      memory: 1024
+    network:
+      - ["private_network", {ip: "11.12.14.14"}]
+  run_list:
+  - recipe[apt]
+suites:
+- name: default
+  run_list:
+    - recipe[hipsnip-jetty]
+    - recipe[minitest-handler]
+  attributes:
+    jetty:
+      port: 8080
+      version: 9.0.2.v20130417
+      link: http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1
+      checksum: 6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9
+    java:
+      jdk_version: 7
+    minitest:
+      tests: "hipsnip-jetty/*_test.rb"
