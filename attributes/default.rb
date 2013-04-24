@@ -27,11 +27,13 @@ default['jetty']['logs'] = ''
 default['jetty']['java_options'] = ''
 
 ########################################################################
-# Do not touch these attributes or you really know what you doing
+# Do not touch these attributes except if you really know what you doing
 default['jetty']['contexts']      = ""
 default['jetty']['webapps']       = "#{node['jetty']['home']}/webapps"
 ########################################################################
 
+# set of paths of jetty configuration files relative to jetty home directory.
+# e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 default['jetty']['add_confs'] = []
 
 default['jetty']['version']		= '9.0.2.v20130417'
