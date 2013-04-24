@@ -52,6 +52,11 @@ describe "hipsnip-jetty::default" do
 		file = chef_run.file(path)
 		#expect(file).to be_owned_by(node['jetty']['user'], node['jetty']['group'])
 	end
+	it "should create the file /etc/jetty/jetty.conf" do
+		path = '/etc/jetty/jetty.conf';
+		expect(chef_run).to create_file path
+		file = chef_run.file(path)
+	end
 	it "should execute ruby block 'Copy Jetty start.ini file'" do
 		expect(chef_run).to execute_ruby_block 'Copy Jetty start.ini file'
 	end

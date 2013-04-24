@@ -22,6 +22,20 @@ include_recipe 'java'
 require 'fileutils'
 
 ################################################################################
+# Guess node['jetty']['contexts'] attribute if not set based on the given jetty
+#  version in node['jetty']['version']
+#  Reason why: webapps contexts are in /contexts in Jetty 7/8
+#  and in Jetty 9, there are in alongs with the war file (in /webapps)
+
+if node['jetty']['contexts'].empty?
+  if /^9.*/.match(node['jetty']['version'])
+    node.default['jetty']['contexts'] = node['jetty']['webapps']
+  else
+    node.default['jetty']['contexts'] = "/contexts"
+  end
+end
+
+################################################################################
 # Create user and group
 
 user node['jetty']['user'] do
@@ -179,13 +193,14 @@ template '/etc/default/jetty' do
   action :create
 end
 
-# ["jetty.xml"].each do |f|
-#   template "/etc/jetty/#{f}" do
-#     source "#{f}.erb"
-#     mode   '644'
-#     notifies :restart, "service[jetty]"
-#   end
-# end
+
+template "/etc/jetty/jetty.conf" do
+  source "jetty.conf.erb"
+  mode   '644'
+  owner node['jetty']['user']
+  group node['jetty']['group']
+  notifies :restart, "service[jetty]"
+end
 
 ruby_block 'Copy Jetty start.ini file' do
   block do

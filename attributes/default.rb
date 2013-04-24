@@ -26,8 +26,13 @@ default['jetty']['logs'] = ''
 # Extra options to pass to the JVM
 default['jetty']['java_options'] = ''
 
-set['jetty']['contexts']      = "#{node['jetty']['home']}/contexts"
-set['jetty']['webapps']       = "#{node['jetty']['home']}/webapps"
+########################################################################
+# Do not touch these attributes or you really know what you doing
+default['jetty']['contexts']      = ""
+default['jetty']['webapps']       = "#{node['jetty']['home']}/webapps"
+########################################################################
+
+default['jetty']['add_confs'] = []
 
 default['jetty']['version']		= '9.0.2.v20130417'
 default['jetty']['link']      = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1'

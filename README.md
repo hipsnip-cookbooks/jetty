@@ -30,12 +30,22 @@ Everything is alright, it only means that nothing is deployed on the root contex
 ["jetty"]["group"] = "jetty"
 ["jetty"]["home"] = "/usr/share/jetty"
 ["jetty"]["port"] = 8080
-["jetty"]["args"] = "jetty.port=#{node.jetty.port}" # The default arguments to pass to jetty.
-["jetty"]["logs"] = "" # The jetty default folder is $JETTY_HOME/logs/
-["jetty"]["java_options"] = "" # Extra options to pass to the JVM
+# The default arguments to pass to jetty.
+["jetty"]["args"] = "jetty.port=#{node.jetty.port}"
+# The jetty default folder is $JETTY_HOME/logs/
+["jetty"]["logs"] = ""
+# Extra options to pass to the JVM
+["jetty"]["java_options"] = ""
 
-["jetty"]["contexts"] = "#{node.jetty.home}/contexts"
-["jetty"]["webapps"] = "#{node.jetty.home}/webapps"
+########################################################################
+# Do not touch these attributes except if you really know what you doing
+['jetty']['contexts']      = ""
+['jetty']['webapps']       = "#{node['jetty']['home']}/webapps"
+########################################################################
+
+# set of paths of jetty configuration files relative to jetty home directory.
+# e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
+['jetty']['add_confs'] = []
 
 ["jetty"]["version"]	= "9.0.2.v20130417"
 ["jetty"]["link"] = "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1"
