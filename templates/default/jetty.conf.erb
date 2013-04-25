@@ -10,6 +10,6 @@
 # arguments will be in addition to those found in the
 # start.ini file
 # =======================================================
-<% for @conf in @node['jetty']['add_confs'] -%>
+<% for @conf in node['jetty']['add_confs'] %>
 <%= @conf %>
-<% end -%>
+<% end %>
