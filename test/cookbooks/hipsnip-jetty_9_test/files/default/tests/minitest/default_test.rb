@@ -1,11 +1,11 @@
 require File.expand_path('../support/helpers', __FILE__)
 require 'net/http'
 
-describe_recipe "hipsnip-jetty::default" do
+describe_recipe "hipsnip-jetty-9_test::default" do
   include Helpers::CookbookTest
 
   it "should have started a Jetty server" do
-    uri = URI("http://127.0.0.1:#{node.jetty.port}")
+    uri = URI("http://127.0.0.1:#{node['jetty']['port']}")
     attempts_total = 3;
     attempts_remaining = attempts_total
     wait_between_attempt = 10
