@@ -1,6 +1,6 @@
 # hipsnip-jetty
 
-A cookbook to setup a Jetty server.
+A cookbook to setup a Jetty 8/9 server.
 
 [![Build status](https://api.travis-ci.org/hipsnip-cookbooks/jetty.png)](https://travis-ci.org/hipsnip-cookbooks/jetty)
 
@@ -15,49 +15,34 @@ By default the Jetty server is running on port 8080, override `node[:jetty][:por
 As you can see below you can personnalized your Jetty installation thanks to a bunch of attributes to run a Jetty server as you wish.
 
 __N.B:__ Do not freak out when you see this message on the root page of the Jetty server.
-```
-Error 404 - Not Found.
 
-No context on this server matched or handled this request.
-Contexts known to this server are:
-```
+	Error 404 - Not Found.
+
+	No context on this server matched or handled this request.
+	Contexts known to this server are:
+
 Everything is alright, it only means that nothing is deployed on the root context which is okay that's your job ;).
 
 ## Attributes
 
-```
-["jetty"]["user"] = "jetty"
-["jetty"]["group"] = "jetty"
-["jetty"]["home"] = "/usr/share/jetty"
-["jetty"]["port"] = 8080
-# The default arguments to pass to jetty.
-["jetty"]["args"] = "jetty.port=#{node.jetty.port}"
-# The jetty default folder is $JETTY_HOME/logs/
-["jetty"]["logs"] = ""
-# Extra options to pass to the JVM
-["jetty"]["java_options"] = ""
+* `node["jetty"]["user"]` - name of the jetty user, default "jetty".
+* `node["jetty"]["group"]` - name of the jetty group, default "jetty".
+* `node["jetty"]["home"]` - location of the home directory of jetty, default "/usr/share/jetty".
+* `node["jetty"]["port"]` - port number of where jetty listens, default 8080
+* `node["jetty"]["args"]` - arguments pass to jetty at startup , default "", e.g: "jetty.logs=/var/log/jetty".
+* `node["jetty"]["logs"]` - location of the log directory for jetty logs files, default "", i.e log into stdout/stderr
+* `node["jetty"]["java_options"]` - extra arguments pass to the jvm, default "".
 
-########################################################################
-# Do not touch these attributes except if you really know what you doing
-['jetty']['contexts']      = ""
-['jetty']['webapps']       = "#{node['jetty']['home']}/webapps"
-########################################################################
+* `node["jetty"]["add_confs"]` - set of paths, each path must point to a Jetty configuration file, relative path are relative to jetty home directory, default []. e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 
-# set of paths of jetty configuration files relative to jetty home directory.
-# e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
-['jetty']['add_confs'] = []
+* `node["jetty"]["version"]	- version of jetty, default "9.0.2.v20130417".
+* `node["jetty"]["link"]` - link to the jetty archive, default "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1", the link and the version must be coherent.
+* `node["jetty"]["checksum"]` - hash sha256 of the jetty archive, default "6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9"
+* `node["jetty"]["directory"]` - location of the extracted archive, default "/usr/local/src"
 
-["jetty"]["version"]	= "9.0.2.v20130417"
-["jetty"]["link"] = "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1"
-["jetty"]["checksum"] = "6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9" # SHA256
+* `node["jetty"]["log"]["level"]  - log level , default "INFO". levels: SEVERE ERROR WARNING INFO CONFIG FINE FINER FINEST
+* `node["jetty"]["log"]["class"]` - java class used for logging, default "org.eclipse.jetty.util.log.StdErrLog"
 
-["jetty"]["directory"] = "/usr/local/src"
-["jetty"]["download"]  = "#{jetty.directory}/jetty-distribution-#{jetty.version}.tar.gz"
-["jetty"]["extracted"] = "#{jetty.directory}/jetty-distribution-#{jetty.version}"
-
-["jetty"]["log"]["level"]  = "INFO" # SEVERE ERROR (highest value) WARNING INFO CONFIG FINE FINER FINEST (lowest value)
-["jetty"]["log"]["class"] = "org.eclipse.jetty.util.log.StdErrLog"
-```
 
 ## Cookbook development
 
