@@ -28,3 +28,17 @@ suites:
       jdk_version: 7
     minitest:
       tests: "hipsnip-jetty/*_test.rb"
+- name: jetty8
+  run_list:
+    - recipe[hipsnip-jetty]
+    - recipe[minitest-handler]
+  attributes:
+    jetty:
+      port: 8080
+      version: 8.1.10.v20130312
+      link: http://eclipse.org/downloads/download.php?file=/jetty/stable-8/dist/jetty-distribution-8.1.10.v20130312.tar.gz&r=1
+      checksum: e966f87823adc323ce67e99485fea126b84fff5affdc28aa7526e40eb2ec1a5b
+    java:
+      jdk_version: 6
+    minitest:
+      tests: "hipsnip-jetty/*_test.rb"
