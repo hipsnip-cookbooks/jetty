@@ -31,7 +31,7 @@ if node['jetty']['contexts'].empty?
   if /^9.*/.match(node['jetty']['version'])
     node.default['jetty']['contexts'] = node['jetty']['webapps']
   else
-    node.default['jetty']['contexts'] = "/contexts"
+    node.default['jetty']['contexts'] = "#{node['jetty']['home']}/contexts"
   end
 end
 
