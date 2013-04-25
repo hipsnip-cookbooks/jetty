@@ -21,16 +21,10 @@ default['jetty']['group'] = 'jetty'
 default['jetty']['home'] = '/usr/share/jetty'
 default['jetty']['port'] = 8080
 # The default arguments to pass to jetty.
-default['jetty']['args'] = "jetty.port=#{node['jetty']['port']}"
+default['jetty']['args'] = ''
 default['jetty']['logs'] = ''
 # Extra options to pass to the JVM
 default['jetty']['java_options'] = ''
-
-########################################################################
-# Do not touch these attributes except if you really know what you doing
-default['jetty']['contexts']      = ""
-default['jetty']['webapps']       = "#{node['jetty']['home']}/webapps"
-########################################################################
 
 # set of paths of jetty configuration files relative to jetty home directory.
 # e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
@@ -41,8 +35,6 @@ default['jetty']['link']      = 'http://eclipse.org/downloads/download.php?file=
 default['jetty']['checksum']  = '6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9' # SHA256
 
 default['jetty']['directory'] = '/usr/local/src'
-default['jetty']['download']  = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}.tar.gz"
-default['jetty']['extracted'] = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}"
 
 # SEVERE ERROR (highest value) WARNING INFO CONFIG FINE FINER FINEST (lowest value)
 default['jetty']['log']['level']  = 'INFO'
