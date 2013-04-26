@@ -16,22 +16,22 @@ platforms:
 suites:
 - name: default
   run_list:
-    - recipe[hipsnip-jetty_9_test]
+    - recipe[hipsnip-jetty_test::jetty_9]
     - recipe[minitest-handler]
   attributes:
     minitest:
-      tests: "hipsnip-jetty_9_test/default_test.rb"
+      tests: "hipsnip-jetty_test/jetty_9_test.rb"
 - name: jetty-8
   run_list:
-    - recipe[hipsnip-jetty_8_test]
+    - recipe[hipsnip-jetty_test::jetty_8]
     - recipe[minitest-handler]
   attributes:
     minitest:
-      tests: "hipsnip-jetty_8_test/default_test.rb"
+      tests: "hipsnip-jetty_test/jetty_8_test.rb"
 - name: logging-on-files
   run_list:
-    - recipe[hipsnip-jetty_logging_on_files_test]
+    - recipe[hipsnip-jetty_test::logging_on_files]
     - recipe[minitest-handler]
   attributes:
     minitest:
-      tests: "hipsnip-jetty_logging_on_files_test/default_test.rb"
+      tests: "hipsnip-jetty_test/logging_on_files_test.rb"
