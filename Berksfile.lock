@@ -1,6 +1,7 @@
-cookbook 'jetty', :path => '/home/lbdremy/workspace/hipsnip-cookbooks/jetty'
+cookbook 'hipsnip-jetty', :path => '/home/lbdremy/workspace/hipsnip-cookbooks/jetty'
 cookbook 'apt', :locked_version => '1.9.2'
 cookbook 'minitest-handler', :locked_version => '0.1.7'
+cookbook 'hipsnip-jetty_test', :path => 'test/cookbooks/hipsnip-jetty_test'
 cookbook 'java', :locked_version => '1.10.0'
 cookbook 'windows', :locked_version => '1.8.8'
 cookbook 'chef_handler', :locked_version => '1.1.4'
