@@ -2,7 +2,7 @@
 
 A cookbook to setup a Jetty 8/9 server.
 
-[![Build status](https://api.travis-ci.org/hipsnip-cookbooks/jetty.png)](https://travis-ci.org/hipsnip-cookbooks/jetty)
+[![Build status](https://api.travis-ci.org/hipsnip-cookbooks/jetty.png)](https://travis-ci.org/hipsnip-cookbooks/jetty) [![Dependency Status](https://gemnasium.com/hipsnip-cookbooks/jetty.png)](https://gemnasium.com/hipsnip-cookbooks/jetty)
 
 ## Requirements
 
