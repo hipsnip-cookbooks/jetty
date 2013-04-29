@@ -35,12 +35,12 @@ Everything is alright, it only means that nothing is deployed on the root contex
 
 * `node["jetty"]["add_confs"]` - set of paths, each path must point to a Jetty configuration file, relative path are relative to jetty home directory, default []. e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 
-* `node["jetty"]["version"]	- version of jetty, default "9.0.2.v20130417".
+* `node["jetty"]["version"]`	- version of jetty, default "9.0.2.v20130417".
 * `node["jetty"]["link"]` - link to the jetty archive, default "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1", the link and the version must be coherent.
 * `node["jetty"]["checksum"]` - hash sha256 of the jetty archive, default "6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9"
 * `node["jetty"]["directory"]` - location of the extracted archive, default "/usr/local/src"
 
-* `node["jetty"]["log"]["level"]  - log level , default "INFO". levels: SEVERE ERROR WARNING INFO CONFIG FINE FINER FINEST
+* `node["jetty"]["log"]["level"]`  - log level , default "INFO". levels: SEVERE ERROR WARNING INFO CONFIG FINE FINER FINEST
 * `node["jetty"]["log"]["class"]` - java class used for logging, default "org.eclipse.jetty.util.log.StdErrLog"
 
 * `node["jetty"]["syslog"]["enable"]` - if true, it will use the utility logger to log messages into syslog, default false. In order to do this a custom init script is used, see in the "templates" folder, the init script is different for Jetty 8 and Jetty 9.
