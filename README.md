@@ -43,6 +43,10 @@ Everything is alright, it only means that nothing is deployed on the root contex
 * `node["jetty"]["log"]["level"]  - log level , default "INFO". levels: SEVERE ERROR WARNING INFO CONFIG FINE FINER FINEST
 * `node["jetty"]["log"]["class"]` - java class used for logging, default "org.eclipse.jetty.util.log.StdErrLog"
 
+* `node["jetty"]["syslog"]["enable"]` - if true, it will use the utility logger to log messages into syslog, default false. In order to do this a custom init script is used, see in the "templates" folder, the init script is different for Jetty 8 and Jetty 9.
+* `node["jetty"]["syslog"]["priority"]` - string expressing the priority, format expected is "facilility.level", passes the given string as value to the logger utility into the option "--priority"
+* `node["jetty"]["syslog"]["tag"]` - tag the messages with the given string, passes the given string as value to the logger utility into the option "--tag"
+
 
 ## Cookbook development
 
