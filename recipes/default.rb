@@ -28,7 +28,9 @@ require 'fileutils'
 #  and in Jetty 9, there are in alongs with the war file (in /webapps)
 
 node.set['jetty']['webapps'] = "#{node['jetty']['home']}/webapps"
+version = 8
 if /^9.*/.match(node['jetty']['version'])
+  version = 9
   node.set['jetty']['contexts'] = node['jetty']['webapps']
 else
   node.set['jetty']['contexts'] = "#{node['jetty']['home']}/contexts"
@@ -39,9 +41,9 @@ end
 
 node.set['jetty']['download']  = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}.tar.gz"
 node.set['jetty']['extracted'] = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}"
-node.set['jetty']['args'] =  "#{node['jetty']['args']} jetty.port=#{node['jetty']['port']}"
+node.set['jetty']['args'] =  "#{node['jetty']['args']} -Djetty.port=#{node['jetty']['port']}"
 if !node['jetty']['logs'].empty?
-  node.set['jetty']['args'] = "#{node['jetty']['args']} jetty.logs=#{node['jetty']['logs']}"
+  node.set['jetty']['args'] = "#{node['jetty']['args']} -Djetty.logs=#{node['jetty']['logs']}"
 end
 
 ################################################################################
@@ -136,18 +138,26 @@ end
 #################################################################################
 # Init script and setup service
 
-ruby_block 'Copy Jetty init file (jetty.sh)' do
-  block do
-    Chef::Log.info "Copying Jetty init file (jetty.sh) into /etc/init.d/ folder"
-
-    FileUtils.cp File.join(node['jetty']['extracted'], 'bin/jetty.sh'), "/etc/init.d/jetty"
-    raise "Failed to copy Jetty init file (jetty.sh)" unless File.exists?("/etc/init.d/jetty")
+if node['jetty']['syslog']['enable']
+  template '/etc/init.d/jetty' do
+    source "jetty-#{version}.sh.erb"
+    mode   '544'
+    action :create
   end
+else
+  ruby_block 'Copy Jetty init file (jetty.sh)' do
+    block do
+      Chef::Log.info "Copying Jetty init file (jetty.sh) into /etc/init.d/ folder"
 
-  action :create
+      FileUtils.cp File.join(node['jetty']['extracted'], 'bin/jetty.sh'), "/etc/init.d/jetty"
+      raise "Failed to copy Jetty init file (jetty.sh)" unless File.exists?("/etc/init.d/jetty")
+    end
 
-  not_if do
-    File.exists?("/etc/init.d/jetty")
+    action :create
+
+    not_if do
+      File.exists?("/etc/init.d/jetty")
+    end
   end
 end
 

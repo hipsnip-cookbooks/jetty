@@ -40,4 +40,11 @@ default['jetty']['directory'] = '/usr/local/src'
 default['jetty']['log']['level']  = 'INFO'
 default['jetty']['log']['class'] = 'org.eclipse.jetty.util.log.StdErrLog'
 
+# if true, it will use the utility logger to log messages into syslog
+default['jetty']['syslog']['enable'] = false
+# format expected "facility.level", pass the value to the logger utility into the option "--priority"
+default['jetty']['syslog']['priority'] = ''
+# pass the value to the logger utility into the option "--tag"
+default['jetty']['syslog']['tag'] = ''
+
 #default['jetty']['config']['requestHeaderSize'] = 8192 #10000

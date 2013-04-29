@@ -35,3 +35,17 @@ suites:
   attributes:
     minitest:
       tests: "hipsnip-jetty_test/logging_on_files_test.rb"
+- name: use-syslog-jetty-9
+  run_list:
+    - recipe[hipsnip-jetty_test::use_syslog_jetty_9]
+    - recipe[minitest-handler]
+  attributes:
+    minitest:
+      tests: "hipsnip-jetty_test/use_syslog_jetty_9_test.rb"
+- name: use-syslog-jetty-8
+  run_list:
+    - recipe[hipsnip-jetty_test::use_syslog_jetty_8]
+    - recipe[minitest-handler]
+  attributes:
+    minitest:
+      tests: "hipsnip-jetty_test/use_syslog_jetty_8_test.rb"
