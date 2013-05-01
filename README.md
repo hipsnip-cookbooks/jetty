@@ -25,18 +25,18 @@ Everything is alright, it only means that nothing is deployed on the root contex
 
 For example if you like to install Jetty 9 and use syslog:
 
-		node.set['java']['jdk_version'] = 7
+	node.set['java']['jdk_version'] = 7
 
-		node.set['jetty']['port'] = 8080
-		node.set['jetty']['version'] = '9.0.2.v20130417'
-		node.set['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1'
-		node.set['jetty']['checksum'] = '6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9'
+	node.set['jetty']['port'] = 8080
+	node.set['jetty']['version'] = '9.0.2.v20130417'
+	node.set['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1'
+	node.set['jetty']['checksum'] = '6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9'
 
-		node.set['jetty']['syslog']['enable'] = true
-		node.set['jetty']['syslog']['priority'] = 'user.notice'
-		node.set['jetty']['syslog']['tag'] = 'TEST'
+	node.set['jetty']['syslog']['enable'] = true
+	node.set['jetty']['syslog']['priority'] = 'user.notice'
+	node.set['jetty']['syslog']['tag'] = 'TEST'
 
-		include_recipe 'hipsnip-jetty'
+	include_recipe 'hipsnip-jetty'
 
 For more usage examples, have a look to the recipes in test/cookbooks/hipsnip-jetty_test/recipes/.
 
@@ -72,7 +72,7 @@ Everything is explained [here](https://github.com/hipsnip-cookbooks/cookbook-dev
 
 ## Test
 
-		bundle exec rake cookbook:full_test
+	bundle exec rake cookbook:full_test
 
 
 ## Licence
