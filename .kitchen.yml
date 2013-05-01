@@ -16,6 +16,13 @@ platforms:
 suites:
 - name: default
   run_list:
+    - recipe[hipsnip-jetty_test::default]
+    - recipe[minitest-handler]
+  attributes:
+    minitest:
+      tests: "hipsnip-jetty_test/default_test.rb"
+- name: jetty-9
+  run_list:
     - recipe[hipsnip-jetty_test::jetty_9]
     - recipe[minitest-handler]
   attributes:
