@@ -22,7 +22,7 @@ default['jetty']['home'] = '/usr/share/jetty'
 default['jetty']['port'] = 8080
 # The default arguments to pass to jetty.
 default['jetty']['args'] = ''
-default['jetty']['logs'] = ''
+default['jetty']['logs'] = '/var/log/jetty'
 # Extra options to pass to the JVM
 default['jetty']['java_options'] = ''
 
@@ -30,9 +30,9 @@ default['jetty']['java_options'] = ''
 # e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 default['jetty']['add_confs'] = []
 
-default['jetty']['version']		= '9.0.2.v20130417'
-default['jetty']['link']      = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1'
-default['jetty']['checksum']  = '6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9' # SHA256
+default['jetty']['version'] = '8.1.10.v20130312'
+default['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-8/dist/jetty-distribution-8.1.10.v20130312.tar.gz&r=1'
+default['jetty']['checksum'] = 'e966f87823adc323ce67e99485fea126b84fff5affdc28aa7526e40eb2ec1a5b' # SHA256
 
 default['jetty']['directory'] = '/usr/local/src'
 
