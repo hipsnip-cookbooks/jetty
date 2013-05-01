@@ -41,10 +41,7 @@ end
 
 node.set['jetty']['download']  = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}.tar.gz"
 node.set['jetty']['extracted'] = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}"
-node.set['jetty']['args'] =  "#{node['jetty']['args']} -Djetty.port=#{node['jetty']['port']}"
-if !node['jetty']['logs'].empty?
-  node.set['jetty']['args'] = "#{node['jetty']['args']} -Djetty.logs=#{node['jetty']['logs']}"
-end
+node.set['jetty']['args'] =  "#{node['jetty']['args']} -Djetty.port=#{node['jetty']['port']} -Djetty.logs=#{node['jetty']['logs']}"
 
 ################################################################################
 # Create user and group
@@ -240,9 +237,8 @@ end
 ################################################################################
 # Logs
 
-# default folder for logs mandatory at least for the request logs
-logs_folder = !node['jetty']['logs'].empty? ? node['jetty']['logs'] :  "#{node['jetty']['home']}/logs"
-directory logs_folder do
+# folder for logs mandatory at least for the request logs
+directory node['jetty']['logs'] do
   mode '755'
   owner node['jetty']['user']
   group node['jetty']['group']
