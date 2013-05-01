@@ -1,0 +1,9 @@
+#===========================================================
+# Jetty start.jar arguments
+# Each line of this file is prepended to the command line
+# arguments # of a call to:
+#    java -jar start.jar [arg...]
+#===========================================================
+<% for @option in node['jetty']['start_ini']['content'] %>
+<%= @option %>
+<% end %>

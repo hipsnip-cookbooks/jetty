@@ -218,19 +218,29 @@ template "/etc/jetty/jetty.conf" do
   notifies :restart, "service[jetty]"
 end
 
-ruby_block 'Copy Jetty start.ini file' do
-  block do
-    Chef::Log.info "Copying Jetty start.ini file into #{node['jetty']['home']}"
-
-    FileUtils.cp File.join(node['jetty']['extracted'], 'start.ini'), "#{node['jetty']['home']}/"
-    FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'start.ini'))
-    raise "Failed to copy Jetty start.ini file" unless File.exists?("#{node['jetty']['home']}/start.ini")
+if node['jetty']['start_ini']['custom']
+  template "#{node['jetty']['home']}/start.ini" do
+    source "start.ini.erb"
+    mode   '644'
+    owner node['jetty']['user']
+    group node['jetty']['group']
+    notifies :restart, "service[jetty]"
   end
+else
+  ruby_block 'Copy Jetty start.ini file' do
+    block do
+      Chef::Log.info "Copying Jetty start.ini file into #{node['jetty']['home']}"
 
-  action :create
+      FileUtils.cp File.join(node['jetty']['extracted'], 'start.ini'), "#{node['jetty']['home']}/"
+      FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'start.ini'))
+      raise "Failed to copy Jetty start.ini file" unless File.exists?("#{node['jetty']['home']}/start.ini")
+    end
 
-  not_if do
-    File.exists?("#{node['jetty']['home']}/start.ini")
+    action :create
+
+    not_if do
+      File.exists?("#{node['jetty']['home']}/start.ini")
+    end
   end
 end
 

@@ -64,6 +64,9 @@ For more usage examples, have a look to the recipes in test/cookbooks/hipsnip-je
 * `node["jetty"]["syslog"]["priority"]` - string expressing the priority, format expected is "facilility.level", passes the given string as value to the logger utility into the option "--priority"
 * `node["jetty"]["syslog"]["tag"]` - tag the messages with the given string, passes the given string as value to the logger utility into the option "--tag"
 
+* `node["jetty"]["start_ini"]["custom"]` - if true, it will generate a configuration file `start.ini` from the value of the node attribute `["jetty"]["start_ini"]["content"]`, it means that the default configuration file `start.ini` downloaded from the mirror will not be copied in the jetty home, default false.
+* `node["jetty"]["start_ini"]["content"]` - an array of strings, each row is a line of text in the configuration file `start.ini`. The value of this attribute is used only if `node["jetty"]["start_ini"]["custom"]` = true otherwise the value is ignored. default [].
+
 
 ## Cookbook development
 

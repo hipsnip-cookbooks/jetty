@@ -56,3 +56,10 @@ suites:
   attributes:
     minitest:
       tests: "hipsnip-jetty_test/use_syslog_jetty_8_test.rb"
+- name: custom-start-ini
+  run_list:
+    - recipe[hipsnip-jetty_test::custom_start_ini]
+    - recipe[minitest-handler]
+  attributes:
+    minitest:
+      tests: "hipsnip-jetty_test/custom_start_ini_test.rb"

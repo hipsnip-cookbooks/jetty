@@ -47,4 +47,5 @@ default['jetty']['syslog']['priority'] = ''
 # pass the value to the logger utility into the option "--tag"
 default['jetty']['syslog']['tag'] = ''
 
-#default['jetty']['config']['requestHeaderSize'] = 8192 #10000
+default['jetty']['start_ini']['custom'] = false
+default['jetty']['start_ini']['content'] = []
