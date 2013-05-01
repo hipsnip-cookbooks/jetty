@@ -23,6 +23,23 @@ __N.B:__ Do not freak out when you see this message on the root page of the Jett
 
 Everything is alright, it only means that nothing is deployed on the root context which is okay that's your job ;).
 
+For example if you like to install Jetty 9 and use syslog:
+
+		node.set['java']['jdk_version'] = 7
+
+		node.set['jetty']['port'] = 8080
+		node.set['jetty']['version'] = '9.0.2.v20130417'
+		node.set['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1'
+		node.set['jetty']['checksum'] = '6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9'
+
+		node.set['jetty']['syslog']['enable'] = true
+		node.set['jetty']['syslog']['priority'] = 'user.notice'
+		node.set['jetty']['syslog']['tag'] = 'TEST'
+
+		include_recipe 'hipsnip-jetty'
+
+For more usage examples, have a look to the recipes in test/cookbooks/hipsnip-jetty_test/recipes/.
+
 ## Attributes
 
 * `node["jetty"]["user"]` - name of the jetty user, default "jetty".
@@ -30,14 +47,14 @@ Everything is alright, it only means that nothing is deployed on the root contex
 * `node["jetty"]["home"]` - location of the home directory of jetty, default "/usr/share/jetty".
 * `node["jetty"]["port"]` - port number of where jetty listens, default 8080
 * `node["jetty"]["args"]` - arguments pass to jetty at startup , default "", e.g: "jetty.logs=/var/log/jetty".
-* `node["jetty"]["logs"]` - location of the log directory for jetty logs files, default "", i.e log into stdout/stderr
+* `node["jetty"]["logs"]` - location of the log directory for jetty logs files, default "/var/log/jetty", by default only a file containing the logs of each requests is created by Jetty in this folder, all other logs go to stdout but you use the attributes to put all logs in syslog or separate files.
 * `node["jetty"]["java_options"]` - extra arguments pass to the jvm, default "".
 
 * `node["jetty"]["add_confs"]` - set of paths, each path must point to a Jetty configuration file, relative path are relative to jetty home directory, default []. e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 
-* `node["jetty"]["version"]`	- version of jetty, default "9.0.2.v20130417".
-* `node["jetty"]["link"]` - link to the jetty archive, default "http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.0.2.v20130417.tar.gz&r=1", the link and the version must be coherent.
-* `node["jetty"]["checksum"]` - hash sha256 of the jetty archive, default "6ab0c0ba4ff98bfc7399a82a96a047fcd2161ae46622e36a3552ecf10b9cddb9"
+* `node["jetty"]["version"]`	- version of jetty, default '8.1.10.v20130312'.
+* `node["jetty"]["link"]` - link to the jetty archive, default 'http://eclipse.org/downloads/download.php?file=/jetty/stable-8/dist/jetty-distribution-8.1.10.v20130312.tar.gz&r=1', the link and the version must be coherent.
+* `node["jetty"]["checksum"]` - hash sha256 of the jetty archive, default 'e966f87823adc323ce67e99485fea126b84fff5affdc28aa7526e40eb2ec1a5b'
 * `node["jetty"]["directory"]` - location of the extracted archive, default "/usr/local/src"
 
 * `node["jetty"]["log"]["level"]`  - log level , default "INFO". levels: SEVERE ERROR WARNING INFO CONFIG FINE FINER FINEST
@@ -55,9 +72,8 @@ Everything is explained [here](https://github.com/hipsnip-cookbooks/cookbook-dev
 
 ## Test
 
-```
-bundle exec rake cookbook:full_test
-```
+		bundle exec rake cookbook:full_test
+
 
 ## Licence
 
