@@ -2,6 +2,6 @@ export JAVA_HOME=<%= node.java.java_home %>
 export JETTY_HOME=<%= node.jetty.home %>
 export JETTY_USER=<%= node.jetty.user %>
 export JETTY_PORT=<%= node.jetty.port %>
-export JETTY_ARGS="<%= node.jetty.args %>"
+export JETTY_ARGS="<%= node.jetty.args.join(' ') %>"
 export JAVA_OPTIONS="<%= node.jetty.java_options.kind_of?(Array) ?  node.jetty.java_options.join(' ') : node.jetty.java_options %>"
 export JETTY_LOGS="<%= node.jetty.logs %>"

@@ -41,7 +41,7 @@ end
 
 node.set['jetty']['download']  = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}.tar.gz"
 node.set['jetty']['extracted'] = "#{node['jetty']['directory']}/jetty-distribution-#{node['jetty']['version']}"
-node.set['jetty']['args'] =  "#{node['jetty']['args']} -Djetty.port=#{node['jetty']['port']} -Djetty.logs=#{node['jetty']['logs']}"
+node.set['jetty']['args'] =  (node['jetty']['args'] + ["-Djetty.port=#{node['jetty']['port']}", "-Djetty.logs=#{node['jetty']['logs']}"]).uniq
 
 ################################################################################
 # Create user and group
