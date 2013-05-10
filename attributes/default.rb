@@ -24,7 +24,7 @@ default['jetty']['port'] = 8080
 default['jetty']['args'] = ''
 default['jetty']['logs'] = '/var/log/jetty'
 # Extra options to pass to the JVM
-default['jetty']['java_options'] = ''
+default['jetty']['java_options'] = []
 
 # set of paths of jetty configuration files relative to jetty home directory.
 # e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']

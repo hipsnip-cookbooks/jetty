@@ -48,7 +48,7 @@ For more usage examples, have a look to the recipes in test/cookbooks/hipsnip-je
 * `node["jetty"]["port"]` - port number of where jetty listens, default 8080
 * `node["jetty"]["args"]` - arguments pass to jetty at startup , default "", e.g: "jetty.logs=/var/log/jetty".
 * `node["jetty"]["logs"]` - location of the log directory for jetty logs files, default "/var/log/jetty", by default only a file containing the logs of each requests is created by Jetty in this folder, all other logs go to stdout but you use the attributes to put all logs in syslog or separate files.
-* `node["jetty"]["java_options"]` - extra arguments pass to the jvm, default "".
+* `node["jetty"]["java_options"]` - extra arguments pass to the jvm, default []. Note: Between two chef run the attributes are saved on the node if you add on each run an argument, the argument will be duplicated on each new run in the array, use ".uniq" method if you don't want to have duplicated argument in your array when you add a new argument.
 
 * `node["jetty"]["add_confs"]` - set of paths, each path must point to a Jetty configuration file, relative path are relative to jetty home directory, default []. e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 
