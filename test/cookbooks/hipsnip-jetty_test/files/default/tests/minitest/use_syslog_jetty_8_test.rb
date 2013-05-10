@@ -1,7 +1,7 @@
 require File.expand_path('../support/helpers', __FILE__)
 require 'net/http'
 
-describe_recipe "hipsnip-jetty_logging_on_files_test::default" do
+describe_recipe "hipsnip-jetty_use_syslog_jetty_8_test::default" do
   include Helpers::CookbookTest
 
   before do
