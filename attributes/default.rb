@@ -31,7 +31,7 @@ default['jetty']['java_options'] = []
 default['jetty']['add_confs'] = []
 
 default['jetty']['version'] = '8.1.10.v20130312'
-default['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-8/dist/jetty-distribution-8.1.10.v20130312.tar.gz&r=1'
+default['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/8.1.10.v20130312/dist/jetty-distribution-8.1.10.v20130312.tar.gz&r=1'
 default['jetty']['checksum'] = 'e966f87823adc323ce67e99485fea126b84fff5affdc28aa7526e40eb2ec1a5b' # SHA256
 
 default['jetty']['directory'] = '/usr/local/src'
