@@ -57,8 +57,8 @@ describe "hipsnip-jetty::default" do
 		expect(chef_run).to create_file path
 		file = chef_run.file(path)
 	end
-	it "should execute ruby block 'Copy Jetty start.ini file'" do
-		expect(chef_run).to execute_ruby_block 'Copy Jetty start.ini file'
+	it "should create file 'start.ini'" do
+		expect(chef_run).to create_cookbook_file "#{node['jetty']['home']}/start.ini"
 	end
 	it "should create logs folder" do
 		path = !node['jetty']['logs'].empty? ? node['jetty']['logs'] :  "#{node['jetty']['home']}/logs"
