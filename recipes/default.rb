@@ -47,6 +47,7 @@ node.set['jetty']['args'] =  (node['jetty']['args'] + ["-Djetty.port=#{node['jet
 # Create user and group
 
 user node['jetty']['user'] do
+  home  node['jetty']['home']
   shell '/bin/false'
   system true
   action :create
