@@ -54,7 +54,7 @@ user node['jetty']['user'] do
 end
 
 group node['jetty']['group'] do
-  members "jetty"
+  members node['jetty']['user']
   system true
   action :create
 end
