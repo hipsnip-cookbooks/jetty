@@ -407,6 +407,8 @@ case "$ACTION" in
       exit
     fi
 
+    ulimit -n <%= node['jetty']['fd_limit'] %>
+
     if type start-stop-daemon > /dev/null 2>&1
     then
       unset CH_USER

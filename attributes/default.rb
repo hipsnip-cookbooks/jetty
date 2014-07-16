@@ -49,3 +49,7 @@ default['jetty']['syslog']['tag'] = ''
 
 default['jetty']['start_ini']['custom'] = false
 default['jetty']['start_ini']['content'] = []
+
+# open file descriptor limit for jetty process
+default['jetty']['fd_limit'] = 1024
+
