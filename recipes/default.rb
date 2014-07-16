@@ -116,6 +116,21 @@ ruby_block 'Copy Jetty lib files' do
   end
 end
 
+ruby_block 'Copy Jetty module files' do
+  block do
+    Chef::Log.info "Copying Jetty module files into #{node['jetty']['home']}"
+    FileUtils.cp_r File.join(node['jetty']['extracted'], 'modules', ''), node['jetty']['home']
+    FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'modules', ''))
+    raise "Failed to copy Jetty modules" if Dir[File.join(node['jetty']['home'], 'modules', '*')].empty?
+  end
+
+  action :create
+
+  only_if do
+    Dir[File.join(node['jetty']['home'], 'modules', '*')].empty? and 
+    version >= 9
+  end
+end
 
 ruby_block 'Copy Jetty start.jar' do
   block do
