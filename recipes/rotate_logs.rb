@@ -1,5 +1,5 @@
 ## Cookbook Name:: hipsnip-jetty
-## Recipe:: rhel_init
+## Recipe:: rotate_logs
 ##
 ## Copyright 2012-2013, HipSnip Limited
 ##
@@ -15,14 +15,13 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 
+include_recipe "logrotate"
 
-package "redhat-lsb-core"
 
-#Override init script of jetty to run on Centos 6.5 
-template "/etc/init.d/jetty" do
-     source "jetty_init_el.erb"
-     mode 0755
-     owner "root"
-     group "root"
-     notifies  :restart , "service[jetty]" , :delayed
+logrotate_app "jetty" do
+  cookbook "logrotate"
+  path "#{node['jetty']['logs']}/*.log"
+  frequency "daily"
+  rotate 30
+  create "644 root root"
 end

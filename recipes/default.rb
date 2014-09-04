@@ -157,13 +157,26 @@ end
 #################################################################################
 # Init script and setup service
 
-if node['jetty']['syslog']['enable']
-  template '/etc/init.d/jetty' do
+
+if node['jetty']['syslog']['enable'] and not platform_family?("rhel")
+ 
+    template '/etc/init.d/jetty' do
     source "jetty-#{version}.sh.erb"
     mode   '544'
     action :create
   end
-else
+
+elsif platform_family?("rhel")
+
+  template "/etc/init.d/jetty" do
+     source "jetty_init_el.erb"
+     mode 0755
+     owner "root"
+     group "root"
+     notifies  :restart , "service[jetty]" , :delayed
+  end
+
+else 
   ruby_block 'Copy Jetty init file (jetty.sh)' do
     block do
       Chef::Log.info "Copying Jetty init file (jetty.sh) into /etc/init.d/ folder"
