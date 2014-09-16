@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+#
+# Startup script for jetty under *nix systems (it works under NT/cygwin too).
+
 #load it for use daemon function
 . /etc/init.d/functions
 
@@ -8,83 +12,9 @@
 # processname: jetty
 # ========================
 
-# Configuration files
-#
-# /etc/default/jetty
-#   If it exists, this is read at the start of script. It may perform any
-#   sequence of shell commands, like setting relevant environment variables.
-#
-# $HOME/.jettyrc
-#   If it exists, this is read at the start of script. It may perform any
-#   sequence of shell commands, like setting relevant environment variables.
-#
-# /etc/jetty.conf
-#   If found, and no configurations were given on the command line,
-#   the file will be used as this script's configuration.
-#   Each line in the file may contain:
-#     - A comment denoted by the pound (#) sign as first non-blank character.
-#     - The path to a regular file, which will be passed to jetty as a
-#       config.xml file.
-#     - The path to a directory. Each *.xml file in the directory will be
-#       passed to jetty as a config.xml file.
-#
-#   The files will be checked for existence before being passed to jetty.
-#
-# $JETTY_HOME/etc/jetty.xml
-#   If found, used as this script's configuration file, but only if
-#   /etc/jetty.conf was not present. See above.
-#
-# Configuration variables
-#
-# JAVA
-#   Command to invoke Java. If not set, java (from the PATH) will be used.
-#
-# JAVA_OPTIONS
-#   Extra options to pass to the JVM
-#
-# JETTY_HOME
-#   Where Jetty is installed. If not set, the script will try go
-#   guess it by first looking at the invocation path for the script,
-#   and then by looking in standard locations as $HOME/opt/jetty
-#   and /opt/jetty. The java system property "jetty.home" will be
-#   set to this value for use by configure.xml files, f.e.:
-#
-#    <Arg><Property name="jetty.home" default="."/>/webapps/jetty.war</Arg>
-#
-# JETTY_PORT (Deprecated - use JETTY_ARGS)
-#   Override the default port for Jetty servers. If not set then the
-#   default value in the xml configuration file will be used. The java
-#   system property "jetty.port" will be set to this value for use in
-#   configure.xml files. For example, the following idiom is widely
-#   used in the demo config files to respect this property in Listener
-#   configuration elements:
-#
-#    <Set name="Port"><Property name="jetty.port" default="8080"/></Set>
-#
-#   Note: that the config file could ignore this property simply by saying:
-#
-#    <Set name="Port">8080</Set>
-#
-# JETTY_RUN
-#   Where the jetty.pid file should be stored. It defaults to the
-#   first available of /var/run, /usr/var/run, JETTY_HOME and /tmp
-#   if not set.
-#
-# JETTY_PID
-#   The Jetty PID file, defaults to $JETTY_RUN/jetty.pid
-#
-# JETTY_ARGS
-#   The default arguments to pass to jetty.
-#   For example
-#      JETTY_ARGS=jetty.port=8080 jetty.spdy.port=8443 jetty.secure.port=443
-#
-# JETTY_USER
-#   if set, then used as a username to run the server as
-#
-
 usage()
 {
-    echo "Usage: ${0##*/} [-d] {start|stop|run|restart|check|supervise} [ CONFIGS ... ] "
+    echo "Usage: ${0##*/} [-d] {start|stop|restart|status} [ CONFIGS ... ] "
     exit 1
 }
 
@@ -423,6 +353,74 @@ then
   echo "RUN_CMD        =  ${RUN_CMD}"
 fi
 
+
+start(){
+
+      touch $JETTY_PID
+      chown $JETTY_USER:$JETTY_USER $JETTY_PID
+      daemon  --user $JETTY_USER   "/usr/bin/java ${RUN_ARGS[@]} &> /dev/null & \
+                                    echo \$! > '$JETTY_PID'"   
+     #old..
+     #PID=$(ps -ef --sort=start_time | grep java | grep jetty | awk '{ print $2 }')
+     # echo $PID > $JETTY_PID
+
+}
+
+
+stop(){
+
+ if [ ! -e "$JETTY_PID" ]; 
+ then
+
+  echo "jetty is not running"
+
+ else 
+
+  PID=$( cat $JETTY_PID | head -n1)
+
+    if [ $UID -eq 0 ];then
+
+     kill $PID
+      TIMEOUT=10
+      while running "$PID"; do
+        if (( TIMEOUT-- == 0 )); then
+           kill $PID
+       fi
+       sleep 1
+      done
+
+     TIMEOUT=10
+     while running "$PID"; do
+        if (( TIMEOUT-- == 0 )); then
+          kill -?9 $JETTY_PID
+       fi
+
+
+
+        sleep 1
+      done
+
+      rm -f "$JETTY_PID"
+      echo OK
+    else
+      PID=$(cat "$JETTY_PID" 2>/dev/null)
+      kill "$PID" 2>/dev/null
+
+      TIMEOUT=30
+      while running $PID; do
+        if (( TIMEOUT-- == 0 )); then
+          kill -KILL "$PID" 2>/dev/null
+        fi
+
+        sleep 1
+      done
+
+      rm -f "$JETTY_PID"
+      echo OK
+    fi
+   fi
+
+}
 ##################################################
 # Do the action
 ##################################################
@@ -435,20 +433,10 @@ case "$ACTION" in
       exit
     fi
 
-    if [ $UID -eq 0 ] 
+    if [ ! -f "$JETTY_PID" ]
     then
-      unset CH_USER
-      if [ -n "$JETTY_USER" ]
-      then
-        CH_USER="-c$JETTY_USER"
-      fi
-      # ORIGINAL VERSION
-      # start-stop-daemon -S -p"$JETTY_PID" $CH_USER -d"$JETTY_HOME" -b -m -a "$JAVA" -- "${RUN_ARGS[@]}" --daemon
-    
-      #changed for use it on Centos 6.5
-      daemon  --user $JETTY_USER   "/usr/bin/java ${RUN_ARGS[@]} &> /dev/null &  echo $! > /tmp/test.pid" 
-      PID=$(ps -ef --sort=start_time | grep java | grep jetty | awk '{ print $2 }')
-      echo $PID > $JETTY_PID
+
+     start
 
   else
 
@@ -496,94 +484,18 @@ case "$ACTION" in
     ;;
 
   stop)
-    echo -n "Stopping Jetty: "
-
-    PID=$( cat $JETTY_PID | head -n1)
-    if [ $UID -eq 0 ];then 
-
-     kill $PID
-      TIMEOUT=10
-      while running "$PID"; do
-        if (( TIMEOUT-- == 0 )); then
-           kill $PID 
-       fi
-      sleep 1
-  done
-
-     TIMEOUT=10
-     while running "$PID"; do
-        if (( TIMEOUT-- == 0 )); then
-          kill -9  $JETTY_PID
-       fi
-
-
-
-        sleep 1
-      done
-
-      rm -f "$JETTY_PID"
-      echo OK
-    else
-      PID=$(cat "$JETTY_PID" 2>/dev/null)
-      kill "$PID" 2>/dev/null
-
-      TIMEOUT=30
-      while running $PID; do
-        if (( TIMEOUT-- == 0 )); then
-          kill -KILL "$PID" 2>/dev/null
-        fi
-
-        sleep 1
-      done
-
-      rm -f "$JETTY_PID"
-      echo OK
-    fi
-
+   
+          stop
+   
     ;;
 
   restart)
-    JETTY_SH=$0
-    if [ ! -f $JETTY_SH ]; then
-      if [ ! -f $JETTY_HOME/bin/jetty.sh ]; then
-        echo "$JETTY_HOME/bin/jetty.sh does not exist."
-        exit 1
-      fi
-      JETTY_SH=$JETTY_HOME/bin/jetty.sh
-    fi
-
-    "$JETTY_SH" stop "$@"
-    "$JETTY_SH" start "$@"
-
+          echo "restarting Jetty.."
+  	  stop
+          sleep 1
+   	  start
     ;;
 
-  supervise)
-    #
-    # Under control of daemontools supervise monitor which
-    # handles restarts and shutdowns via the svc program.
-    #
-    exec "${RUN_CMD[@]}"
-
-    ;;
-
-  run|demo)
-    echo "Running Jetty: "
-
-    if [ -f "$JETTY_PID" ]
-    then
-      if running "$JETTY_PID"
-      then
-        echo "Already Running!"
-        exit 1
-      else
-        # dead pid file - remove
-        rm -f "$JETTY_PID"
-      fi
-    fi
-
-    exec "${RUN_CMD[@]}"
-
-    ;;
 
   check|status)
     echo "Checking arguments to Jetty: "
@@ -603,7 +515,7 @@ case "$ACTION" in
 
     if [ -f "$JETTY_PID" ]
     then
-      echo "Jetty running pid=$(< "$JETTY_PID")"
+      echo "Jetty is running.  pid: $( cat  $JETTY_PID)" 
       exit 0
     fi
     exit 1
