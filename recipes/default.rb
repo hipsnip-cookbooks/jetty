@@ -133,16 +133,50 @@ ruby_block 'Copy Jetty start.jar' do
   end
 end
 
+
+#### Copy Jetty Modules
+if version == 9
+  ruby_block 'Copy Jetty Modules' do
+   block do 
+   	Chef::Log.info "Copying Jetty Modules into #{node['jetty']['home']}"
+   	FileUtils.cp_r File.join(node['jetty']['extracted'], 'modules', ''), node['jetty']['home']
+   	FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'modules', ''))
+   	raise "Failed to copy Jetty libraries" if Dir[File.join(node['jetty']['home'], 'modules', '*')].empty?
+   end
+
+   action :create
+
+   not_if do
+       Dir[File.join(node['jetty']['home'], 'modules', '*')].empty?
+       not Dir.exist? "#{node['jetty']['extracted']}/modules"  
+   end
+ end
+end
+
+
 #################################################################################
 # Init script and setup service
 
-if node['jetty']['syslog']['enable']
-  template '/etc/init.d/jetty' do
+
+if node['jetty']['syslog']['enable'] and not platform_family?("rhel")
+ 
+    template '/etc/init.d/jetty' do
     source "jetty-#{version}.sh.erb"
     mode   '544'
     action :create
   end
-else
+
+elsif platform_family?("rhel")
+
+  template "/etc/init.d/jetty" do
+     source "jetty_init_el.erb"
+     mode 0755
+     owner "root"
+     group "root"
+     notifies  :restart , "service[jetty]" , :delayed
+  end
+
+else 
   ruby_block 'Copy Jetty init file (jetty.sh)' do
     block do
       Chef::Log.info "Copying Jetty init file (jetty.sh) into /etc/init.d/ folder"
@@ -227,6 +261,22 @@ if node['jetty']['start_ini']['custom']
     group node['jetty']['group']
     notifies :restart, "service[jetty]"
   end
+
+elsif node['jetty']['start_ini']['default']
+
+    Chef::Log.info "Using default start.ini"    	
+
+    ruby_block 'Copy start.ini' do
+	 block do
+            Chef::Log.info "Copying start.ini"
+	    FileUtils.cp File.join(node['jetty']['extracted'], 'start.ini'), "#{node['jetty']['home']}/start.ini"
+            raise "Failed to copy start.ini" unless File.exists?("#{node['jetty']['home']}/start.ini")
+         end
+     action :create
+     not_if do
+       File.exists?("#{node['jetty']['home']}/start.ini")
+     end
+   end
 else
   cookbook_file "#{node['jetty']['home']}/start.ini" do
     source "jetty-#{version}-start.ini"

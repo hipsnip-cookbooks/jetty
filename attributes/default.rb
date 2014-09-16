@@ -48,4 +48,5 @@ default['jetty']['syslog']['priority'] = ''
 default['jetty']['syslog']['tag'] = ''
 
 default['jetty']['start_ini']['custom'] = false
+default['jetty']['start_ini']['default'] = false
 default['jetty']['start_ini']['content'] = []
