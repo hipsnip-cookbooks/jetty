@@ -1,4 +1,5 @@
 # hipsnip-jetty
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/hipsnip-cookbooks/jetty?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A cookbook to setup a Jetty 8/9 server.
 
