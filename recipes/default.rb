@@ -35,6 +35,13 @@ if /^9.*/.match(node['jetty']['version'])
 else
   node.set['jetty']['contexts'] = "#{node['jetty']['home']}/contexts"
 end
+minor_version = node['jetty']['version'].split(".")[1].to_i
+
+def above9_0?(major, minor)
+  val = false
+  val = true if major >= 9 and minor > 0
+  val
+end
 
 ################################################################################
 # Set node attributes
@@ -63,7 +70,9 @@ end
 # Create few directories for jetty
 
 
-[node['jetty']['home'], node['jetty']['contexts'], node['jetty']['webapps'], "#{node['jetty']['home']}/lib","#{node['jetty']['home']}/resources"].each do |d|
+dirs = [node['jetty']['home'], node['jetty']['contexts'], node['jetty']['webapps'], "#{node['jetty']['home']}/lib","#{node['jetty']['home']}/resources"]
+dirs << "#{node['jetty']['home']}/modules" if above9_0?(version, minor_version)
+dirs.each do |d|
   directory d do
     owner node['jetty']['user']
     group node['jetty']['group']
@@ -93,8 +102,6 @@ ruby_block 'Extract Jetty' do
     raise "Failed to extract Jetty package" unless File.exists?(node['jetty']['extracted'])
   end
 
-  action :create
-
   not_if do
     File.exists?(node['jetty']['extracted'])
   end
@@ -108,8 +115,6 @@ ruby_block 'Copy Jetty lib files' do
     FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'lib', ''))
     raise "Failed to copy Jetty libraries" if Dir[File.join(node['jetty']['home'], 'lib', '*')].empty?
   end
-
-  action :create
 
   only_if do
     Dir[File.join(node['jetty']['home'], 'lib', '*')].empty?
@@ -125,8 +130,6 @@ ruby_block 'Copy Jetty start.jar' do
     FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'start.jar'))
     raise "Failed to copy Jetty start.jar" unless File.exists?(File.join(node['jetty']['home'], 'start.jar'))
   end
-
-  action :create
 
   not_if do
     File.exists?(File.join(node['jetty']['home'], 'start.jar'))
@@ -150,8 +153,6 @@ else
       FileUtils.cp File.join(node['jetty']['extracted'], 'bin/jetty.sh'), "/etc/init.d/jetty"
       raise "Failed to copy Jetty init file (jetty.sh)" unless File.exists?("/etc/init.d/jetty")
     end
-
-    action :create
 
     not_if do
       File.exists?("/etc/init.d/jetty")
@@ -194,10 +195,27 @@ ruby_block 'Copy Jetty config files' do
     raise "Failed to copy Jetty config files" if Dir[File.join(node['jetty']['home'], 'etc', '*')].empty?
   end
 
-  action :create
-
   only_if do
     Dir[File.join(node['jetty']['home'], 'etc', '*')].empty?
+  end
+end
+
+if above9_0?(version, minor_version)
+  # Copy all the modules
+  #
+  ruby_block 'Copy Jetty modules' do
+    block do
+      Chef::Log.info "Copying Jetty modules files into #{node['jetty']['home']}/modules"
+
+      FileUtils.cp_r File.join(node['jetty']['extracted'], 'modules', ''), node['jetty']['home']
+
+      FileUtils.chown_R(node['jetty']['user'],node['jetty']['group'],File.join(node['jetty']['home'], 'modules', ''))
+      raise "Failed to copy Jetty config files" if Dir[File.join(node['jetty']['home'], 'modules', '*')].empty?
+    end
+
+    only_if do
+      Dir[File.join(node['jetty']['home'], 'modules', '*')].empty?
+    end
   end
 end
 
@@ -228,8 +246,13 @@ if node['jetty']['start_ini']['custom']
     notifies :restart, "service[jetty]"
   end
 else
+  if above9_0?(version, minor_version)
+    source = "jetty-9-1-start.ini"
+  else
+    source = "jetty-#{version}-start.ini"
+  end
   cookbook_file "#{node['jetty']['home']}/start.ini" do
-    source "jetty-#{version}-start.ini"
+    source source
     mode   '644'
     owner node['jetty']['user']
     group node['jetty']['group']

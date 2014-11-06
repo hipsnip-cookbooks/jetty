@@ -3,6 +3,9 @@
     "hipsnip-jetty": {
       "path": "."
     },
+    "java": {
+      "locked_version": "1.28.0"
+    },
     "apt": {
       "locked_version": "2.1.0"
     },
@@ -12,17 +15,8 @@
     "hipsnip-jetty_test": {
       "path": "./test/cookbooks/hipsnip-jetty_test"
     },
-    "java": {
-      "locked_version": "1.14.0"
-    },
-    "windows": {
-      "locked_version": "1.10.0"
-    },
     "chef_handler": {
-      "locked_version": "1.1.4"
-    },
-    "aws": {
-      "locked_version": "0.101.6"
+      "locked_version": "1.1.6"
     }
   }
 }
