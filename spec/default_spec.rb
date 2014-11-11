@@ -31,7 +31,7 @@ describe "hipsnip-jetty::default" do
         )
       end
       it "should execute ruby block 'Extract Jetty'" do
-        expect(chef_run).to run_ruby_block 'Extract Jetty'
+        expect(chef_run).to run_execute 'Extract Jetty'
       end
       it "should execute ruby block 'Copy Jetty lib files'" do
         expect(chef_run).to run_ruby_block 'Copy Jetty lib files'

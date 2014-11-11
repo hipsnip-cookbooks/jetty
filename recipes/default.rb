@@ -94,19 +94,19 @@ remote_file node['jetty']['download'] do
   mode     0644
 end
 
-
-ruby_block 'Extract Jetty' do
-  block do
-    Chef::Log.info "Extracting Jetty archive #{node['jetty']['download']} into #{node['jetty']['directory']}"
-    `tar xzf #{node['jetty']['download']} -C #{node['jetty']['directory']}`
-    raise "Failed to extract Jetty package" unless File.exists?(node['jetty']['extracted'])
-  end
+execute 'Extract Jetty' do
+  command "tar xzf #{node['jetty']['download']} -C #{node['jetty']['directory']}"
 
   not_if do
     File.exists?(node['jetty']['extracted'])
   end
 end
 
+ruby_block 'Check the Extracted Jetty' do
+  block do
+    raise "Failed to extract Jetty package" unless File.exists?(node['jetty']['extracted'])
+  end
+end
 
 ruby_block 'Copy Jetty lib files' do
   block do
@@ -264,10 +264,12 @@ end
 # Logs
 
 # folder for logs mandatory at least for the request logs
-directory node['jetty']['logs'] do
-  mode '755'
-  owner node['jetty']['user']
-  group node['jetty']['group']
+[node['jetty']['logs'], "#{node['jetty']['home']}/logs"].each do |dir|
+  directory dir do
+    mode '755'
+    owner node['jetty']['user']
+    group node['jetty']['group']
+  end
 end
 
 template File.join(node['jetty']['home'], 'resources/jetty-logging.properties') do

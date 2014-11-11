@@ -7,7 +7,7 @@
       "locked_version": "1.28.0"
     },
     "apt": {
-      "locked_version": "2.1.0"
+      "locked_version": "2.6.0"
     },
     "minitest-handler": {
       "locked_version": "0.2.1"
