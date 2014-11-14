@@ -30,9 +30,9 @@ default['jetty']['java_options'] = []
 # e.g: ['etc/jetty-webapps.xml', 'etc/jetty-http.xml']
 default['jetty']['add_confs'] = []
 
-default['jetty']['version'] = '8.1.10.v20130312'
-default['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/8.1.10.v20130312/dist/jetty-distribution-8.1.10.v20130312.tar.gz&r=1'
-default['jetty']['checksum'] = 'e966f87823adc323ce67e99485fea126b84fff5affdc28aa7526e40eb2ec1a5b' # SHA256
+default['jetty']['version'] = '9.2.3.v20140905'
+default['jetty']['link'] = 'http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.2.3.v20140905.tar.gz&r=1'
+default['jetty']['checksum'] = '9a47f2d02efa52583db3195623080ff7ccd96b6aa9150aeaa43e1203de22770a' # SHA256
 
 default['jetty']['directory'] = '/usr/local/src'
 
