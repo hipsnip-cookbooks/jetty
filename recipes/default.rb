@@ -82,6 +82,8 @@ end
 remote_file node['jetty']['download'] do
   source   node['jetty']['link']
   checksum node['jetty']['checksum']
+  retries node['jetty']['retries'] 
+  retry_delay node['jetty']['retry_delay']
   mode     0644
 end
 
