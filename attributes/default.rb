@@ -17,7 +17,9 @@
 # limitations under the License.
 #
 default['jetty']['user'] = 'jetty'
+default['jetty']['uid'] = nil # Default behaviour is to allow the system to pick the UID dynamically
 default['jetty']['group'] = 'jetty'
+default['jetty']['gid'] = nil # Default behaviour is to allow the system to pick the GID dynamically
 default['jetty']['home'] = '/usr/share/jetty'
 default['jetty']['port'] = 8080
 # The default arguments to pass to jetty.
