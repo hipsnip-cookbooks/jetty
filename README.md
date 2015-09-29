@@ -43,7 +43,9 @@ For more usage examples, have a look to the recipes in test/cookbooks/hipsnip-je
 ## Attributes
 
 * `node["jetty"]["user"]` - name of the jetty user, default "jetty".
+* `node["jetty"]["uid"]` - Numeric UID of the jetty user, default is to be dynamically allocated by the system.
 * `node["jetty"]["group"]` - name of the jetty group, default "jetty".
+* `node["jetty"]["gid"]` - Numeric GID of the jetty group, default is to be dynamically allocated by the system.
 * `node["jetty"]["home"]` - location of the home directory of jetty, default "/usr/share/jetty".
 * `node["jetty"]["port"]` - port number of where jetty listens, default 8080
 * `node["jetty"]["args"]` - arguments pass to jetty at startup , default [], e.g: ["jetty.logs=/var/log/jetty"].
