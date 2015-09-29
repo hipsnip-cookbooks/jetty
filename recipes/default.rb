@@ -50,12 +50,18 @@ user node['jetty']['user'] do
   home  node['jetty']['home']
   shell '/bin/false'
   system true
+  unless node['jetty']['uid'].nil?
+    uid node['jetty']['uid']
+  end
   action :create
 end
 
 group node['jetty']['group'] do
   members node['jetty']['user']
   system true
+  unless node['jetty']['gid'].nil?
+    gid node['jetty']['gid']
+  end
   action :create
 end
 
